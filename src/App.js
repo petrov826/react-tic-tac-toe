@@ -22,7 +22,8 @@ export default function Board() {
 
   function handleClick(i) {
     // 既に値が入っている時はreturnする(early return)
-    if (squares[i]) {
+    // 勝負が決まっている場合もreturnする
+    if (squares[i] || calculateWinner(squares)) {
       return
     }
 
@@ -38,8 +39,17 @@ export default function Board() {
     setSquares(updatedSquares) // squaresを更新する
   }
 
+  const winner = calculateWinner(squares)
+  let status
+  if (winner) {
+    status = `Winner: ${winner}`
+  } else {
+    status = `Next Player: ${isXNext ? "X" : "O"}`
+  }
+
   return (
     <>
+      <div className="status">{status}</div>
       <div className="board-row">
         {/* handleClick(0)と書くと関数が呼ばれてしまって、コールバックにならない
             アロー関数を使ってコールバックを作る */}
@@ -61,4 +71,27 @@ export default function Board() {
       </div>
     </>
   );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ]
+  for (let i = 0; i < lines.length; i++) {
+    // 同じライン上のインデックスを取得する
+    const [a, b, c] = lines[i]
+    // aがnullではなく、aとbが同じで、aとcも同じなら...
+    if (squares[a] && (squares[a] === squares[b]) && (squares[a] === squares[c])) {
+      return squares[a]
+    }
+  }
+  // それ以外の時は勝利者なし
+  return null
 }

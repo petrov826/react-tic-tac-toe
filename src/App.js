@@ -1,6 +1,10 @@
 function Square({ value }) {
+  function handleClick() {
+    console.log("clicked")
+  }
+
   // propsで受け取った値を表示する
-  return <button className="square">{value}</button>
+  return <button className="square" onClick={handleClick}>{value}</button>
 }
 
 // Squareコンポーネントを宣言する

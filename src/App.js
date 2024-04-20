@@ -1,5 +1,8 @@
 import { useState } from "react";
 
+// チュートリアルサイトより引用
+// 親コンポーネント (Board) から子コンポーネント (Square) に伝えるために、
+// propsを使用する
 function Square({ value, onSquareClick }) {
   // propsで受け取ったvalueを表示し、
   // ボタンが押されたらonSquareClickを呼ぶ
@@ -11,6 +14,10 @@ function Square({ value, onSquareClick }) {
 // default: この関数を使うファイルに、この関数がメイン関数だと伝える
 export default function Board() {
   const [isXNext, setIsXNext] = useState(true)
+  // チュートリアルサイトより引用
+  // 複数の子コンポーネントからデータを収集したい、
+  // あるいは 2 つの子コンポーネント同士で通信したい、と思ったら、
+  // 代わりに親コンポーネントに共有の state を宣言するようにしてください
   const [squares, setSquares] = useState(Array(9).fill(null))
 
   function handleClick(i) {

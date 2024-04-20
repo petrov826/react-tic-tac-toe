@@ -10,16 +10,25 @@ function Square({ value, onSquareClick }) {
 // export: この関数を他のファイルからアクセスできるようにする
 // default: この関数を使うファイルに、この関数がメイン関数だと伝える
 export default function Board() {
+  const [isXNext, setIsXNext] = useState(true)
   const [squares, setSquares] = useState(Array(9).fill(null))
 
   function handleClick(i) {
-    const updatedSquares = squares.slice() // squaresをコピーする
-    updatedSquares[i] = "X" // i番目の値を上書きする
-    setSquares(updatedSquares) // squaresを更新する
+    // 既に値が入っている時はreturnする(early return)
+    if (squares[i]) {
+      return
+    }
 
-    // 参考: stateをコピーせずに直接上書きしようとしても動かない
-    // squares[i] = "X"
-    // setSquares(squares)
+    const updatedSquares = squares.slice() // squaresをコピーする
+
+    if (isXNext) {
+      updatedSquares[i] = "X" // i番目の値を上書きする
+    } else {
+      updatedSquares[i] = "O"
+    }
+    setIsXNext(!isXNext)
+
+    setSquares(updatedSquares) // squaresを更新する
   }
 
   return (

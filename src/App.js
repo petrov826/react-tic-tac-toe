@@ -12,13 +12,14 @@ function Square({ value, onSquareClick }) {
 // Boardコンポーネントを宣言する
 // export: この関数を他のファイルからアクセスできるようにする
 // default: この関数を使うファイルに、この関数がメイン関数だと伝える
-export default function Board() {
-  const [isXNext, setIsXNext] = useState(true)
+function Board({ isXNext, squares, onPlay }) {
+  // Gameにリフトアップしたのでstateをコメントアウトした
+  // const [isXNext, setIsXNext] = useState(true)
   // チュートリアルサイトより引用
   // 複数の子コンポーネントからデータを収集したい、
   // あるいは 2 つの子コンポーネント同士で通信したい、と思ったら、
   // 代わりに親コンポーネントに共有の state を宣言するようにしてください
-  const [squares, setSquares] = useState(Array(9).fill(null))
+  // const [squares, setSquares] = useState(Array(9).fill(null))
 
   function handleClick(i) {
     // 既に値が入っている時はreturnする(early return)
@@ -34,9 +35,14 @@ export default function Board() {
     } else {
       updatedSquares[i] = "O"
     }
-    setIsXNext(!isXNext)
-
-    setSquares(updatedSquares) // squaresを更新する
+    // isXNextとSquaresはGameにリフトアップしたので、
+    // 直接上書きすることはできない
+    // チュートリアルサイトから引用（SquareからBoardにリフトアップした時の説明）
+    // state はそれを定義しているコンポーネントにプライベートなものですので、
+    // Square から Board の state を直接更新することはできません。
+    // setIsXNext(!isXNext)
+    // setSquares(updatedSquares) // squaresを更新する
+    onPlay(updatedSquares)
   }
 
   const winner = calculateWinner(squares)
@@ -71,6 +77,30 @@ export default function Board() {
       </div>
     </>
   );
+}
+
+export default function Game() {
+  const [isXNext, setIsXNext] = useState(true)
+  const [history, setHistory] = useState([
+    Array(9).fill(null)
+  ])
+  const currentSquares = history[history.length - 1]
+
+  function handlePlay(nextSquares) {
+    setHistory([...history, nextSquares])
+    setIsXNext(!isXNext)
+  }
+  
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board isXNext={isXNext} squares={currentSquares} onPlay={handlePlay}/>
+      </div>
+      <div className="game-info">
+        <ol>{/*todo*/}</ol>
+      </div>
+    </div>
+  )
 }
 
 function calculateWinner(squares) {

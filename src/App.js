@@ -80,23 +80,25 @@ function Board({ isXNext, squares, onPlay }) {
 }
 
 export default function Game() {
-  const [isXNext, setIsXNext] = useState(true)
   const [history, setHistory] = useState([
     Array(9).fill(null)
   ])
   const [currentMove, setCurrentMove] = useState(0)
+  // currentMove % 2から計算できるのでこのstateはいらない
+  // const [isXNext, setIsXNext] = useState(true)
+  const isXNext = currentMove % 2
   const currentSquares = history[currentMove]
 
   function handlePlay(nextSquares) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares]
     setHistory(nextHistory)
     setCurrentMove(nextHistory.length - 1)
-    setIsXNext(!isXNext)
+    // setIsXNext(!isXNext)
   }
 
   function jumpTo(nextMove) {
     setCurrentMove(nextMove)
-    setIsXNext(nextMove % 2 === 0)
+    // setIsXNext(nextMove % 2 === 0)
   }
   
   // squares: historyから取り出された要素
